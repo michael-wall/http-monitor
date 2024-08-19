@@ -14,7 +14,7 @@ For each Page to be monitored create a new Page Details item (with the + icon) i
 
 For example:
 
-`/web/xxx/savings/compare-savings-account-rates|<div class="portlet-boundary portlet-boundary_ybssavingsfinder_  portlet-static portlet-static-end portlet-decorate  " id="p_p_id_ybssavingsfinder_INSTANCE_iatm_">`
+`/web/xxx/savings/compare-savings-account-rates|<div class="portlet-boundary portlet-boundary_xxxsavingsfinder_  portlet-static portlet-static-end portlet-decorate  " id="p_p_id_xxxsavingsfinder_INSTANCE_iatm_">`
 
 The relativePageUrl should include the site friendly URL e.g. /web/xxx/savings/compare-savings-account-rates
 The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected.
