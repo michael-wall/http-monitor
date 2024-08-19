@@ -1,8 +1,8 @@
-**POC of HTTP Monitor**
+**POC of Liferay PaaS HTTP Monitor**
 
-This module can be used to check if a particular string is present on a page e.g. after a build deployment.
+This module can be used to check if a particular string is present on a page e.g. after a build deployment. This can be used to ensure a specific widget is being rendered as expected.
 
-The component is triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service, and it uses absolute urls with `http://localhost:8080` and site friendly URL syntax as it bypasses the webserver Service so it can be targetted at a specific node in a High Availability environment.
+The component is triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service, and it uses absolute urls with `http://localhost:8080` and site friendly URL syntax as it bypasses the webserver service so it can be targetted at a specific node in a high availability Liferay PaaS environment.
 
 **Configuring the HTTP Monitor**
 
@@ -21,7 +21,7 @@ The expectedPageContent should be a piece of HTML content that is present on the
 
 **Running the HTTP Monitor**
 
-1. Go to the Liferay PaaS > Liferay service shell, select a Liferay service instance (for a High Availability environment).
+1. Go to the Liferay PaaS > Liferay service shell, select a Liferay service instance (for a high availability environment).
 2. Entry command `telnet localhost 11311` and press Enter.
 3. Enter command `monitor:checkPages` and wait for the command to complete.
 4. Review the onscreen output. For each page / widget combination that didn't work, review the details. If the result is 'Expected content not found.' then using the gogo shell command on the same Liferay service instance try stopping and starting the associated OSGi module.
