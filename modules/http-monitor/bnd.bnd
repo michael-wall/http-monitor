@@ -1,0 +1,4 @@
+Bundle-Name: http-monitor
+Bundle-SymbolicName: http-monitor
+Bundle-Version: 1.0.0
+Export-Package: com.mw.monitoring.config
