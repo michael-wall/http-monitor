@@ -1,8 +1,8 @@
 **POC of Liferay PaaS HTTP Monitor**
 
-This module can be used to check if a particular string is present on a page e.g. after a build deployment. This can be used to ensure a specific widget is being rendered as expected.
+This module can be used to check a set of pages. For each it checks if a specific piece of HTML is present on a specific page. This can be used to ensure a specific widget is being rendered as expected after a Liferay PaaS build has been deployed in the environment.
 
-The component is triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service, and it uses absolute urls with `http://localhost:8080` and site friendly URL syntax as it bypasses the webserver service so it can be targetted at a specific node in a high availability Liferay PaaS environment.
+The component is to be triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service. It uses absolute urls with `http://localhost:8080` and site friendly URL syntax to bypass the webserver service (and the load balancer etc). This allows it to targetted at a specific node in a high availability Liferay PaaS environmentm which allows each node can be checked individually. This means it can be used to verify that the widget is rendering on the page on each individual Liferay service instance.
 
 **Configuring the HTTP Monitor**
 
@@ -22,7 +22,7 @@ or
 
 The relativePageUrl should include the site friendly URL e.g. /web/xxx/savings/compare-savings-account-rates
 
-The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In this example it is the main HTML div tag for the target widget, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page. It should be identical to the HTML from the page, without and additional leading or trailing spaces or carriage returns added etc.
+The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In these examples it is the main HTML div tag for the widget in question, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page. The value should be identical to the HTML string from the page, without any additional leading or trailing spaces or carriage returns added etc.
 
 **Running the HTTP Monitor**
 
