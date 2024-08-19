@@ -64,21 +64,29 @@ public class HttpMonitor {
 		for (int i = 0; i < checkPages.length; i++) {
 			count ++;
 			
-			String checkPage = checkPages[i];
-			
-			String[] tokens = checkPage.split("\\|");
-			
-			if (tokens.length == 2) {
-				validCount ++;
-				
-				String relativePageUrl = tokens[0];
-				String expectedPageContent = tokens[1];
-				
-				boolean found = checkPage(i, relativePageUrl, expectedPageContent);
-				
-				if (found) foundCount ++;
+			if (Validator.isNull(checkPages[i])) {
+				log("[" + i + "]: ERROR: invalid pageDetails value.");
 			} else {
-				log("[" + i + "]: ERROR: invalid token count in pageDetails.");		
+				String checkPage = checkPages[i];
+				
+				String[] tokens = checkPage.split("\\|");
+				
+				if (tokens.length == 2) {
+					String relativePageUrl = tokens[0].trim();
+					String expectedPageContent = tokens[1].trim();
+					
+					if (Validator.isNull(relativePageUrl) || Validator.isNull(expectedPageContent)) {
+						log("[" + i + "]: ERROR: invalid pageDetails token(s).");		
+					} else {
+						validCount ++;
+						
+						boolean found = checkPage(i, relativePageUrl, expectedPageContent);
+						
+						if (found) foundCount ++;						
+					}
+				} else {
+					log("[" + i + "]: ERROR: invalid token count in pageDetails.");		
+				}				
 			}
 		}
 		
@@ -92,9 +100,6 @@ public class HttpMonitor {
 	}
 	
 	private boolean checkPage(int count, String pageUrl, String expectedPageContent) {
-		
-		if (Validator.isNull(pageUrl) || Validator.isNull(expectedPageContent)) return false;
-		
 		String absoluteUrl = getPageUrl(pageUrl);
 		
 		log("[" + count + "]: absoluteUrl: " + absoluteUrl);
