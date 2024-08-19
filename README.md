@@ -23,8 +23,8 @@ The expectedPageContent should be a piece of HTML content that is present on the
 **Running the HTTP Monitor**
 
 1. Go to the Liferay PaaS > Liferay service shell, select a Liferay service instance (for a high availability environment).
-2. Entry command `telnet localhost 11311` and press Enter.
-3. Enter command `monitor:checkPages` and wait for the command to complete.
+2. Enter the command `telnet localhost 11311` then press Enter.
+3. Enter the command `httpMonitor:checkPages` then press Enter and wait for the command to complete.
 4. Review the onscreen output. For each page / widget combination that didn't work, review the details. If the result is 'Expected content not found.' then using the gogo shell command on the same Liferay service instance try stopping and starting the associated OSGi module.
 5. Repeat steps 3 to 4 for the same Liferay service instance. At this point all of the monitored pages on the Liferay service instances should be rendering as expected.
 6. Repeat the steps for each of the Liferay service instances.

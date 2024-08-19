@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Modified;
 @Component(
 	immediate = true,
 	configurationPid = HttpMonitorConfiguration.PID,
-	property = {"osgi.command.function=checkPages", "osgi.command.scope=monitor"},
+	property = {"osgi.command.function=checkPages", "osgi.command.scope=httpMonitor"},
 	service = HttpMonitor.class
 )
 public class HttpMonitor {
