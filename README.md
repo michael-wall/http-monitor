@@ -18,7 +18,7 @@ For example:
 
 The relativePageUrl should include the site friendly URL e.g. /web/xxx/savings/compare-savings-account-rates
 
-The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected.
+The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In this example it is the main HTML div tag for the target widget, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page.
 
 **Running the HTTP Monitor**
 
