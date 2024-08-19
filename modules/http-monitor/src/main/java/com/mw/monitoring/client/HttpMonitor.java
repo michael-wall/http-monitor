@@ -53,6 +53,7 @@ public class HttpMonitor {
 	}	
 	
 	public void checkPages() {
+		long start = System.currentTimeMillis();
 		
 		String[] checkPages = httpMonitorConfiguration.pageDetails();
 		
@@ -61,6 +62,8 @@ public class HttpMonitor {
 		int foundCount = 0;
 		
 		for (int i = 0; i < checkPages.length; i++) {
+			count ++;
+			
 			String checkPage = checkPages[i];
 			
 			String[] tokens = checkPage.split("\\|");
@@ -74,10 +77,14 @@ public class HttpMonitor {
 				boolean found = checkPage(i, relativePageUrl, expectedPageContent);
 				
 				if (found) foundCount ++;
+			} else {
+				log("[" + i + "]: ERROR: invalid token count in pageDetails.");		
 			}
 		}
 		
-		log("Count: " + count + ", valid count: " + validCount + ", found count: " + foundCount);
+		double totalDurationSeconds = Math.ceil((double)(System.currentTimeMillis() - start) / 1000);
+		
+		log("Count: " + count + ", valid count: " + validCount + ", found count: " + foundCount + ", total duration: " + totalDurationSeconds + " second(s).");
 	}
 	
 	private String getPageUrl(String relativePageUrl) {
@@ -109,7 +116,7 @@ public class HttpMonitor {
 			int status = httpURLConnection.getResponseCode();
 
 			if (status != HttpURLConnection.HTTP_OK) {
-				log("[" + count + "]: Unexpected HTTP Status Code: " + status + " for URL: " + absoluteUrl);
+				log("[" + count + "]: ERROR: Unexpected HTTP Status Code: " + status + " for URL: " + absoluteUrl);
 				
 				return false;
 			}
@@ -125,17 +132,17 @@ public class HttpMonitor {
 			int pos = pageContent.indexOf(expectedPageContent);
 			
 			if (pos == -1) {
-				log("[" + count + "]: Expected content not found.");
+				log("[" + count + "]: ERROR: Expected content not found.");
 				
 				return false;
 			} else {
-				log("[" + count + "]: Expected content found.");
+				log("[" + count + "]: SUCCESS: Expected content found.");
 				
 				return true;				
 			}
 
 		} catch (Exception e) {
-			log("[" + count + "]: Exception: " + e.getMessage() + ", " + e);
+			log("[" + count + "]: ERROR: " + e.getMessage() + ", " + e);
 		} finally {
 			if (httpURLConnection != null) {
 				httpURLConnection.disconnect();	
