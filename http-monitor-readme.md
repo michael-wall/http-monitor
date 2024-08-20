@@ -32,7 +32,7 @@ or
 
 The relativePageUrl should include the site friendly URL e.g. /web/xxx/savings/compare-savings-account-rates
 
-The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In these examples it is the main HTML div tag for the widget in question, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page. The value should be identical to the HTML string from the page, without any additional leading or trailing spaces or carriage returns added etc.
+The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In these examples it is the main HTML div tag for the widget in question, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page. The check is case sensitive and the value should be IDENTICAL to the HTML string from the page, without any additional leading or trailing spaces or carriage returns added etc.
 
 **Avoid using a piece of content with carriage returns as it may not match correctly.**
 
@@ -52,7 +52,7 @@ Use the System Settings export to create a com.mw.monitoring.config.HttpMonitorC
 
 **Notes**
 
-1. The module has been tested in a standard DXP 7.3 Liferay PaaS environment, a high availability DXP 7.3 Liferay PaaS environment and a self hosted Liferay DXP 7.4 environment, all using Zulu JDK 8 for compile and runtime.
+1. The module has been tested in a standard DXP 7.3 Liferay PaaS environment, a high availability DXP 7.3 Liferay PaaS environment and a self hosted Liferay DXP 7.3 environment, all using Zulu JDK 8 for compile and runtime and Liferay DXP 7.3 U26.
 2. All of the pages should be Public pages that allow Guest access.
 3. If an instanceable widget is removed and added back to the same page it will be assigned a new instance id - e.g. the esmm part of offsetcalculatornew_INSTANCE_esmm will be different. 
 4. Ensure the Gogo shell command is run in the newly provisioned Liferay PaaS Liferay service shells and not the old Liferay services that are to be terminated after a Liferay PaaS build deployment completes.
