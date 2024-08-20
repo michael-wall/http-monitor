@@ -6,7 +6,17 @@ Although third party HTTP Monitors exist, their requests would go through the en
 
 The component is to be triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service. It uses absolute urls with `http://localhost:8080` and site friendly URL syntax to bypass the webserver service (and the load balancer etc). This allows it to targetted at each specific Liferay service instance in a high availability Liferay PaaS environment. This means it can be used to verify that the widget is rendering on the page on each individual Liferay service instance.
 
-**Configuring the HTTP Monitor**
+**Deploying the HTTP Monitor in Liferay PaaS**
+
+The http-monitor module should be copied into the modules folder of the Liferay service folder of an existing Liferay DXP Cloud workspace so it is deployed as part of the Liferay PaaS build deployment process like other OSGi modules.
+
+Refresh the workspace, then do a Gradle > refresh Gradle Project at the liferay service folder level.
+
+Add the module source code to the git repository to trigger a Liferay PaaS build.
+
+Deploy the resulting build to a Liferay PaaS environment
+
+**Configuring the HTTP Monitor (when deployed)**
 
 Login to the Liferay DXP environment as an Administrator and go to Control Panel > Configuration > System Settings > HTTP Monitor > HTTP Monitor Configuration.
 
@@ -43,8 +53,7 @@ Use the System Settings export to create a com.mw.monitoring.config.HttpMonitorC
 **Notes**
 
 1. The module has been tested in a standard DXP 7.3 Liferay PaaS environment, a high availability DXP 7.3 Liferay PaaS environment and a self hosted Liferay DXP 7.4 environment, all using Zulu JDK 8 for compile and runtime.
-2. The http-monitor module should be copied into the modules folder of the Liferay service folder of an existing Liferay DXP Cloud workspace so it is deployed as part of the Liferay PaaS build deployment process like other OSGi modules.
-3. All of the pages should be Public pages that allow Guest access.
-4. If an instanceable widget is removed and added back to the same page it will be assigned a new instance id - e.g. the esmm part of offsetcalculatornew_INSTANCE_esmm will be different. 
-5. Ensure the Gogo shell command is run in the newly provisioned Liferay PaaS Liferay service shells and not the old Liferay services that are to be terminated after a Liferay PaaS build deployment completes.
-6. Ensure the connect and readout timeout values are not too low. The Liferay service's various caches will be empty after a Liferay PaaS build deployment. This can mean that each page is slower to load than normal on each Liferay service instance for the first page load after a Liferay PaaS build deployment.
+2. All of the pages should be Public pages that allow Guest access.
+3. If an instanceable widget is removed and added back to the same page it will be assigned a new instance id - e.g. the esmm part of offsetcalculatornew_INSTANCE_esmm will be different. 
+4. Ensure the Gogo shell command is run in the newly provisioned Liferay PaaS Liferay service shells and not the old Liferay services that are to be terminated after a Liferay PaaS build deployment completes.
+5. Ensure the connect and readout timeout values are not too low. The Liferay service's various caches will be empty after a Liferay PaaS build deployment. This can mean that each page is slower to load than normal on each Liferay service instance for the first page load after a Liferay PaaS build deployment.
