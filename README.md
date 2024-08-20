@@ -2,17 +2,17 @@
 
 This module can be used to check a set of pages. For each it checks if a specific piece of HTML is present on a specific page. This can be used to ensure a specific widget is being rendered as expected after a Liferay PaaS build has been deployed in the environment.
 
-The component is to be triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service. It uses absolute urls with `http://localhost:8080` and site friendly URL syntax to bypass the webserver service (and the load balancer etc). This allows it to targetted at a specific node in a high availability Liferay PaaS environmentm which allows each node can be checked individually. This means it can be used to verify that the widget is rendering on the page on each individual Liferay service instance.
+Although third party HTTP Monitors exist, their requests would go through the environments webserver and loadbalancer so they wouldn't be able to target the individual Liferay service instances of a high availability environment to check the page on each individual Liferay service instance.
+
+The component is to be triggered using the gogo shell from the Liferay PaaS > Liferay Service shell service. It uses absolute urls with `http://localhost:8080` and site friendly URL syntax to bypass the webserver service (and the load balancer etc). This allows it to targetted at each specific Liferay service instance in a high availability Liferay PaaS environment. This means it can be used to verify that the widget is rendering on the page on each individual Liferay service instance.
 
 **Configuring the HTTP Monitor**
 
-Go to System Settings > HTTP Monitor > HTTP Monitor Configuration.
+Login to the Liferay DXP environment as an Administrator and go to Control Panel > Configuration > System Settings > HTTP Monitor > HTTP Monitor Configuration.
 
-For a Liferay PaaS environment leave the Protocol, Hostname and Port settings as the defaults.
+For a Liferay PaaS environment leave the Protocol (http), Hostname (localhost) and Port (8080) settings as the defaults.
 
-For each Page to be monitored create a new Page Details item (with the + icon) in the syntax relativePageUrl|expectedPageContent. 
-
-For example:
+For each Page to be monitored create a new Page Details item (with the + icon) in the syntax relativePageUrl|expectedPageContent. For example:
 
 `/web/xxx/savings/compare-savings-account-rates|<div class="portlet-boundary portlet-boundary_xxxsavingsfinder_  portlet-static portlet-static-end portlet-decorate  " id="p_p_id_xxxsavingsfinder_INSTANCE_iatm_">`
 
@@ -23,6 +23,12 @@ or
 The relativePageUrl should include the site friendly URL e.g. /web/xxx/savings/compare-savings-account-rates
 
 The expectedPageContent should be a piece of HTML content that is present on the page when the widget is rendering as expected. In these examples it is the main HTML div tag for the widget in question, which is generally present in a similar format for each widget on each page, and can be found by using for example Chrome > Inspect near the top of the target widget while viewing the page. The value should be identical to the HTML string from the page, without any additional leading or trailing spaces or carriage returns added etc.
+
+**Avoid using a piece of content with carriage returns as it may not match correctly.**
+
+Click Save or Update when done.
+
+Use the System Settings export to create a com.mw.monitoring.config.HttpMonitorConfiguration.config configuration file that can be used in the Liferay DXP Cloud Workspace to avoid needing configure for each individual environment manually.
 
 **Running the HTTP Monitor**
 

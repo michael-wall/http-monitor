@@ -57,59 +57,84 @@ public class HttpMonitor {
 		
 		String[] checkPages = httpMonitorConfiguration.pageDetails();
 		
-		int count = 0;
-		int validCount = 0;
-		int foundCount = 0;
+		int pageDetailsCount = 0;
+		int pos = 0;
+		int pageFoundCount = 0;
+		int pageContentFoundCount = 0;
+		
+		if (checkPages.length == 0) {
+			log("No Page Details defined. Please review the Configuration.");
+			
+			return;
+		}
 		
 		for (int i = 0; i < checkPages.length; i++) {
-			count ++;
+			pageDetailsCount ++;
+			pos ++;
 			
-			if (Validator.isNull(checkPages[i])) {
-				log("[" + i + "]: ERROR: invalid pageDetails value.");
-			} else {
+			boolean isValidPageDetail = validatePageDetail(pos, checkPages[i]);
+			
+			if (isValidPageDetail) {
 				String checkPage = checkPages[i];
 				
 				String[] tokens = checkPage.split("\\|");
 				
-				if (tokens.length == 2) {
-					String relativePageUrl = tokens[0].trim();
-					String expectedPageContent = tokens[1].trim();
-					
-					if (Validator.isNull(relativePageUrl) || Validator.isNull(expectedPageContent)) {
-						log("[" + i + "]: ERROR: invalid pageDetails token(s).");		
-					} else {
-						validCount ++;
-						
-						boolean found = checkPage(i, relativePageUrl, expectedPageContent);
-						
-						if (found) foundCount ++;						
-					}
-				} else {
-					log("[" + i + "]: ERROR: invalid token count in pageDetails.");		
-				}				
+				String relativePageUrl = tokens[0].trim();
+				String expectedPageContent = tokens[1].trim();
+				
+				boolean[] checkPageResult = checkPage(pos, relativePageUrl, expectedPageContent);
+				
+				// response boolean[] is {pageFound, pageContentFound}
+				if (checkPageResult[0]) pageFoundCount ++;
+				if (checkPageResult[1]) pageContentFoundCount ++;
 			}
 		}
 		
 		double totalDurationSeconds = Math.ceil((double)(System.currentTimeMillis() - start) / 1000);
 		
-		log("Count: " + count + ", valid count: " + validCount + ", found count: " + foundCount + ", total duration: " + totalDurationSeconds + " second(s).");
+		log("Page Details count: " + pageDetailsCount + ", page found count: " + pageFoundCount + ", page content found count: " + pageContentFoundCount + ", total duration: " + totalDurationSeconds + " second(s).");
+	}
+	
+	private boolean validatePageDetail(int pos, String pageDetail) {
+		if (Validator.isNull(pageDetail)) {
+			log("[" + pos + "]: CONFIG ERROR: invalid pageDetails value.");
+		} else {
+			String[] tokens = pageDetail.split("\\|");
+			
+			if (tokens.length == 2) {
+				String relativePageUrl = tokens[0].trim();
+				String expectedPageContent = tokens[1].trim();
+				
+				if (Validator.isNull(relativePageUrl) || Validator.isNull(expectedPageContent)) {
+					log("[" + pos + "]: CONFIG ERROR: invalid pageDetails token(s).");		
+				} else if (!relativePageUrl.startsWith("/")) {
+					log("[" + pos + "]: CONFIG ERROR: relativePageUrl must start with a / character.");	
+				} else {
+					return true;					
+				}
+			} else {
+				log("[" + pos + "]: CONFIG ERROR: invalid token count in pageDetails.");		
+			}				
+		}		
+		
+		return false;
 	}
 	
 	private String getPageUrl(String relativePageUrl) {
 		return httpMonitorConfiguration.protocol() + "://" + httpMonitorConfiguration.hostname() + ":" + httpMonitorConfiguration.port() + relativePageUrl;
 	}
 	
-	private boolean checkPage(int count, String pageUrl, String expectedPageContent) {
-		String absoluteUrl = getPageUrl(pageUrl);
+	private boolean[] checkPage(int pos, String pageUrl, String expectedPageContent) {
+		String absolutePageUrl = getPageUrl(pageUrl);
 		
-		log("[" + count + "]: absoluteUrl: " + absoluteUrl);
-		log("[" + count + "]: expectedPageContent: " + expectedPageContent);
+		log("[" + pos + "]: URL: " + absolutePageUrl);
+		log("[" + pos + "]: expectedPageContent: " + expectedPageContent);
 		
 		HttpURLConnection httpURLConnection = null;
 		BufferedReader bufferedReader = null;
 
 		try {
-			URL url = new URL(absoluteUrl);
+			URL url = new URL(absolutePageUrl);
 			httpURLConnection = (HttpURLConnection)url.openConnection();
 			httpURLConnection.setRequestMethod("GET");
 			httpURLConnection.setDoOutput(true);
@@ -121,9 +146,12 @@ public class HttpMonitor {
 			int status = httpURLConnection.getResponseCode();
 
 			if (status != HttpURLConnection.HTTP_OK) {
-				log("[" + count + "]: ERROR: Unexpected HTTP Status Code: " + status + " for URL: " + absoluteUrl);
+				log("[" + pos + "]: FAILURE: Unexpected HTTP Status Code: " + status + " for URL: " + absolutePageUrl);
 				
-				return false;
+				// response boolean[] is {pageFound, pageContentFound}
+				boolean[] response = { false, false };
+				
+				return response;
 			}
 			
 			bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
@@ -134,20 +162,26 @@ public class HttpMonitor {
 				pageContent.append(inputLine);
 			}
 			
-			int pos = pageContent.indexOf(expectedPageContent);
+			int contentPosition = pageContent.indexOf(expectedPageContent);
 			
-			if (pos == -1) {
-				log("[" + count + "]: ERROR: Expected content not found.");
+			if (contentPosition == -1) {
+				log("[" + pos + "]: FAILURE: Expected content not found.");
 				
-				return false;
+				// response boolean[] is {pageFound, pageContentFound}
+				boolean[] response = { true, false };
+				
+				return response;	
 			} else {
-				log("[" + count + "]: SUCCESS: Expected content found.");
+				log("[" + pos + "]: SUCCESS: Expected content found.");
 				
-				return true;				
+				// response boolean[] is {pageFound, pageContentFound}
+				boolean[] response = { true, true };
+				
+				return response;				
 			}
 
 		} catch (Exception e) {
-			log("[" + count + "]: ERROR: " + e.getMessage() + ", " + e);
+			log("[" + pos + "]: FAILURE: " + e.getMessage() + ", " + e);
 		} finally {
 			if (httpURLConnection != null) {
 				httpURLConnection.disconnect();	
@@ -160,7 +194,10 @@ public class HttpMonitor {
 			}
 		}
 		
-		return false;
+		// response boolean[] is {pageFound, pageContentFound}
+		boolean[] response = { false, false };
+		
+		return response;
 	}
 	
 	private void log(String value) {
