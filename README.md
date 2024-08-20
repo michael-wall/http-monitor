@@ -10,7 +10,7 @@ The component is to be triggered using the gogo shell from the Liferay PaaS > Li
 
 The http-monitor module should be copied into the modules folder of the Liferay service folder of an existing Liferay DXP Cloud workspace so it is deployed as part of the Liferay PaaS build deployment process like other OSGi modules.
 
-Refresh the workspace, then do a Gradle > refresh Gradle Project at the liferay service folder level.
+Refresh the workspace, then do a Gradle > refresh Gradle Project at the liferay service folder level to ensure the module source code is compiling as expected.
 
 Add the module source code to the git repository to trigger a Liferay PaaS build.
 
