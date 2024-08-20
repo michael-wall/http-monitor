@@ -1,3 +1,8 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 }
+
+compileJava   {
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
