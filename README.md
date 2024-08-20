@@ -30,7 +30,7 @@ Click Save or Update when done.
 
 Use the System Settings export to create a com.mw.monitoring.config.HttpMonitorConfiguration.config configuration file that can be used in the Liferay DXP Cloud Workspace to avoid needing configure for each individual environment manually.
 
-**Running the HTTP Monitor**
+**Running the HTTP Monitor (when deployed)**
 
 1. Go to the Liferay PaaS > Liferay service shell, select a Liferay service instance (for a high availability environment).
 2. Enter the command `telnet localhost 11311` then press Enter.
@@ -43,7 +43,8 @@ Use the System Settings export to create a com.mw.monitoring.config.HttpMonitorC
 **Notes**
 
 1. The module has been tested in a standard DXP 7.3 Liferay PaaS environment, a high availability DXP 7.3 Liferay PaaS environment and a self hosted Liferay DXP 7.4 environment, all using Zulu JDK 8 for compile and runtime.
-2. All of the pages should be Public pages that allow Guest access.
-3. If an instanceable widget is removed and added back to the same page it will be assigned a new instance id - e.g. the esmm part of offsetcalculatornew_INSTANCE_esmm will be different. 
-4. Ensure the Gogo shell command is run in the newly provisioned Liferay PaaS Liferay service shells and not the old Liferay services that are to be terminated after a Liferay PaaS build deployment completes.
-5. Ensure the connect and readout timeout values are not too low. The Liferay service's various caches will be empty after a Liferay PaaS build deployment. This can mean that each page is slower to load than normal on each Liferay service instance for the first page load after a Liferay PaaS build deployment.
+2. The http-monitor module should be copied into the modules folder of the Liferay service folder of an existing Liferay DXP Cloud workspace so it is deployed as part of the Liferay PaaS build deployment process like other OSGi modules.
+3. All of the pages should be Public pages that allow Guest access.
+4. If an instanceable widget is removed and added back to the same page it will be assigned a new instance id - e.g. the esmm part of offsetcalculatornew_INSTANCE_esmm will be different. 
+5. Ensure the Gogo shell command is run in the newly provisioned Liferay PaaS Liferay service shells and not the old Liferay services that are to be terminated after a Liferay PaaS build deployment completes.
+6. Ensure the connect and readout timeout values are not too low. The Liferay service's various caches will be empty after a Liferay PaaS build deployment. This can mean that each page is slower to load than normal on each Liferay service instance for the first page load after a Liferay PaaS build deployment.
