@@ -1,0 +1,5 @@
+Bundle-Name: js-resolved-module
+Bundle-SymbolicName: mw.com.js.resolved.module
+Bundle-Version: 1.0.0
+Export-Package: com.mw.js.resolved.module
+#Web-ContextPath: /mw-resolved-module

@@ -1,0 +1,6 @@
+Bundle-Name: js-resolved-module-fragment
+Bundle-SymbolicName: mw.com.js.resolved.module.fragment
+Bundle-Version: 1.0.0
+Fragment-Host: com.liferay.frontend.js.loader.modules.extender
+Export-Package: \
+	com.liferay.frontend.js.loader.modules.extender.internal.npm.builtin,\

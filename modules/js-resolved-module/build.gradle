@@ -1,0 +1,4 @@
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+	compileOnly group: 'com.liferay', name: 'com.liferay.frontend.js.loader.modules.extender', version: '5.0.39'
+}
